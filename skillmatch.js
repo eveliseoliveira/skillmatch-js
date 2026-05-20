@@ -32,6 +32,11 @@ const vagas = [
 ]
 
 function analisaVagas(vagas, candidato) {
+
+  let melhorVaga = null
+  let maiorCompatibilidade = 0
+  let prioridadeEstudo = []
+
   for (let i = 0; i < vagas.length; i++) {
     const vaga = vagas[i]
 
@@ -43,6 +48,8 @@ function analisaVagas(vagas, candidato) {
       !candidato.habilidades.includes(requisitoVaga)
     )
 
+    prioridadeEstudo.push(...requisitosFaltando)
+    
     const calculaCompatibilidade = Math.round(
       (requisitosEncontrados.length / vaga.requisitos.length) * 100
     )
@@ -59,6 +66,12 @@ function analisaVagas(vagas, candidato) {
       classificacao = "Baixa compatibilidade"
     } 
 
+    if (calculaCompatibilidade > maiorCompatibilidade) {
+      maiorCompatibilidade = calculaCompatibilidade
+      melhorVaga = vaga
+    }
+    
+
     console.log(`Empresa: ${vaga.empresa}`)
     console.log(`Cargo: ${vaga.cargo}`)
     console.log(`Compatibilidade: ${calculaCompatibilidade}%`)
@@ -67,6 +80,15 @@ function analisaVagas(vagas, candidato) {
     console.log(`Classificação: ${classificacao}`)
     console.log("--------------------------------------------------")
   }
+
+    console.log("Vaga mais compatível:")
+    console.log(`Empresa: ${melhorVaga.empresa}`)
+    console.log(`Cargo: ${melhorVaga.cargo}`)
+    console.log(`Compatibilidade: ${maiorCompatibilidade}%`)
+    console.log("--------------------------------------------------")
+
+    console.log("Recomendações de estudo:")
+    console.log("Priorize estudar:", prioridadeEstudo.length ? prioridadeEstudo : "Nada encontrado", "pois esses conteúdos aparecem nas vagas analisadas.")
 }
 
 analisaVagas(vagas, candidato)
