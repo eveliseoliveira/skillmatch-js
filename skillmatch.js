@@ -48,8 +48,12 @@ function analisaVagas(vagas, candidato) {
       !candidato.habilidades.includes(requisitoVaga)
     )
 
+    const atendeTodosRequisitos = vaga.requisitos.every(requisitoVaga =>
+      candidato.habilidades.includes(requisitoVaga)
+    )
+
     prioridadeEstudo.push(...requisitosFaltando)
-    
+
     const calculaCompatibilidade = Math.round(
       (requisitosEncontrados.length / vaga.requisitos.length) * 100
     )
@@ -70,7 +74,6 @@ function analisaVagas(vagas, candidato) {
       maiorCompatibilidade = calculaCompatibilidade
       melhorVaga = vaga
     }
-    
 
     console.log(`Empresa: ${vaga.empresa}`)
     console.log(`Cargo: ${vaga.cargo}`)
@@ -78,8 +81,28 @@ function analisaVagas(vagas, candidato) {
     console.log("Habilidades encontradas:", requisitosEncontrados.length ? requisitosEncontrados : "Nenhuma")
     console.log("Habilidades faltantes:", requisitosFaltando.length ? requisitosFaltando : "Nenhuma")
     console.log(`Classificação: ${classificacao}`)
+    console.log(`Atende todos os requisitos? ${atendeTodosRequisitos ? "Sim" : "Não"}`)
     console.log("--------------------------------------------------")
   }
+
+    const resumoCompatibilidade = vagas.reduce((total, vaga) => {
+
+      const encontrados = vaga.requisitos.filter(requisitoVaga =>
+        candidato.habilidades.includes(requisitoVaga)
+      )
+
+      const compatibilidade =
+        (encontrados.length / vaga.requisitos.length) * 100
+
+      return total + compatibilidade
+
+    }, 0)
+
+    const mediaCompatibilidade =
+      resumoCompatibilidade / vagas.length
+
+    console.log(`Média de compatibilidade: ${mediaCompatibilidade.toFixed(2)}%`)
+    console.log("--------------------------------------------------")
 
     console.log("Vaga mais compatível:")
     console.log(`Empresa: ${melhorVaga.empresa}`)
