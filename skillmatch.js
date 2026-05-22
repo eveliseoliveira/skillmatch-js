@@ -1,44 +1,77 @@
+class Vaga {
+  constructor(empresa, cargo, requisitos, salario, modalidade) {
+    this.empresa = empresa;
+    this.cargo = cargo;
+    this.requisitos = requisitos;
+    this.salario = salario;
+    this.modalidade = modalidade;
+  }
+
+  exibicaoResumo() {
+    return `${this.cargo} na empresa ${this.empresa}`;
+  }
+}
+
+class VagaFrontEnd extends Vaga {
+  constructor(empresa, cargo, requisitos, salario, modalidade, nivel) {
+    super(empresa, cargo, requisitos, salario, modalidade);
+    this.nivel = nivel;
+  }
+
+  exibirNivel() {
+    return `Nível da vaga: ${this.nivel}`;
+  }
+}
+
 const candidato = {
   nome: "Ana",
   habilidades: ["JavaScript", "React", "CSS"],
   experienciaMeses: 3
 }
 
-const vagas = [
-  {
-    id: 1,
-    empresa: "TechStart",
-    cargo: "Desenvolvedor Front-End Júnior",
-    requisitos: ["JavaScript", "GitHub", "Lógica de Programação"],
-    salario: 2800,
-    modalidade: "Remoto"
-  },
-  {
-    id: 2,
-    empresa: "Empresa2",
-    cargo: "Estágio Front-End",
-    requisitos: ["JavaScript", "GitHub", "Kanban"],
-    salario: 1800,
-    modalidade: "Híbrido"
-  },
-  {
-    id: 3,
-    empresa: "Empresa3",
-    cargo: "Desenvolvedor Front-End Júnior",
-    requisitos: ["JavaScript", "GitHub", "HTML", "CSS"],
-    salario: 2000,
-    modalidade: "Presencial"
-  }
-]
+const vagasGerais = [
+  new Vaga("Empresa1", 
+    "Dev Back-End", 
+    ["Node", "SQL"], 
+    3000, 
+    "Remoto"
+  )
+];
 
-function analisaVagas(vagas, candidato) {
+const vagasFrontEnd = [
+  new VagaFrontEnd(
+    "Empresa2",
+    "Dev Front-End",
+    ["JavaScript", "React", "CSS"],
+    2500,
+    "Híbrido",
+    "Júnior"
+  )
+];
+
+const vagasEstagio = [
+  new Vaga("Empresa3", 
+    "Estágio TI", 
+    ["Lógica", "Git"], 
+    1500, 
+    "Presencial"
+  )
+];
+
+const todasVagas = [
+  ...vagasGerais,
+  ...vagasFrontEnd,
+  ...vagasEstagio
+];
+
+function analisaVagas(todasVagas, candidato) {
 
   let melhorVaga = null
   let maiorCompatibilidade = 0
   let prioridadeEstudo = []
 
-  for (let i = 0; i < vagas.length; i++) {
-    const vaga = vagas[i]
+  for (let i = 0; i < todasVagas.length; i++) {
+    const vaga = todasVagas[i]
 
     const requisitosEncontrados = vaga.requisitos.filter(requisitoVaga =>
       candidato.habilidades.includes(requisitoVaga)
@@ -75,17 +108,22 @@ function analisaVagas(vagas, candidato) {
       melhorVaga = vaga
     }
 
-    console.log(`Empresa: ${vaga.empresa}`)
-    console.log(`Cargo: ${vaga.cargo}`)
+    console.log(vaga.exibicaoResumo())
+    console.log(`Salário: ${vaga.salario}`)
+    console.log(`Modalidade: ${vaga.modalidade}`)
+    if (vaga instanceof VagaFrontEnd) {
+      console.log(vaga.exibirNivel())
+    }
     console.log(`Compatibilidade: ${calculaCompatibilidade}%`)
     console.log("Habilidades encontradas:", requisitosEncontrados.length ? requisitosEncontrados : "Nenhuma")
     console.log("Habilidades faltantes:", requisitosFaltando.length ? requisitosFaltando : "Nenhuma")
     console.log(`Classificação: ${classificacao}`)
     console.log(`Atende todos os requisitos? ${atendeTodosRequisitos ? "Sim" : "Não"}`)
+
     console.log("--------------------------------------------------")
   }
 
-    const resumoCompatibilidade = vagas.reduce((total, vaga) => {
+    const resumoCompatibilidade = todasVagas.reduce((total, vaga) => {
 
       const encontrados = vaga.requisitos.filter(requisitoVaga =>
         candidato.habilidades.includes(requisitoVaga)
@@ -99,7 +137,7 @@ function analisaVagas(vagas, candidato) {
     }, 0)
 
     const mediaCompatibilidade =
-      resumoCompatibilidade / vagas.length
+      resumoCompatibilidade / todasVagas.length
 
     console.log(`Média de compatibilidade: ${mediaCompatibilidade.toFixed(2)}%`)
     console.log("--------------------------------------------------")
@@ -114,4 +152,4 @@ function analisaVagas(vagas, candidato) {
     console.log("Priorize estudar:", prioridadeEstudo.length ? prioridadeEstudo : "Nada encontrado", "pois esses conteúdos aparecem nas vagas analisadas.")
 }
 
-analisaVagas(vagas, candidato)
+analisaVagas(todasVagas, candidato)
