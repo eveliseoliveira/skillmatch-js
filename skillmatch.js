@@ -64,7 +64,60 @@ const todasVagas = [
   ...vagasEstagio
 ];
 
-function analisaVagas(todasVagas, candidato) {
+function finalizarAnalise(nomeCandidato, callback) {
+  console.log("Análise finalizada.");
+  callback(nomeCandidato);
+}
+
+function exibirMensagemFinal(nome) {
+  console.log(`${nome}, revise suas habilidades faltantes e atualize seu plano de estudos.`);
+}
+
+function criaContadorDeAnalises() {
+
+  let totalAnalises = 0;
+
+  return function() {
+    totalAnalises++;
+
+    console.log(`Total de análises realizadas: ${totalAnalises}`);
+  }
+
+}
+
+const contadorAnalises = criaContadorDeAnalises();
+
+function buscarVagasSimuladas() {
+
+  return new Promise((resolve) => {
+
+    console.log("Carregando vagas...")
+
+    setTimeout(() => {
+
+      resolve(todasVagas)
+
+    }, 2000)
+
+  })
+
+}
+
+async function iniciarSistema() {
+
+  const vagasCarregadas = await buscarVagasSimuladas()
+
+  console.log("Vagas carregadas com sucesso!")
+
+  analisaVagas(
+    vagasCarregadas,
+    candidato,
+    exibirMensagemFinal
+  )
+
+}
+
+function analisaVagas(todasVagas, candidato, callback) {
 
   let melhorVaga = null
   let maiorCompatibilidade = 0
@@ -150,6 +203,10 @@ function analisaVagas(todasVagas, candidato) {
 
     console.log("Recomendações de estudo:")
     console.log("Priorize estudar:", prioridadeEstudo.length ? prioridadeEstudo : "Nada encontrado", "pois esses conteúdos aparecem nas vagas analisadas.")
+
+    finalizarAnalise(candidato.nome, callback)
+
+    contadorAnalises();
 }
 
-analisaVagas(todasVagas, candidato)
+iniciarSistema()
