@@ -189,16 +189,19 @@ function analisaVagas(todasVagas, candidato, callback) {
 
     }, 0)
 
-    const mediaCompatibilidade =
-      resumoCompatibilidade / todasVagas.length
+    const mediaCompatibilidade = todasVagas.length > 0 ? resumoCompatibilidade / todasVagas.length : 0;
 
     console.log(`Média de compatibilidade: ${mediaCompatibilidade.toFixed(2)}%`)
     console.log("--------------------------------------------------")
 
-    console.log("Vaga mais compatível:")
-    console.log(`Empresa: ${melhorVaga.empresa}`)
-    console.log(`Cargo: ${melhorVaga.cargo}`)
-    console.log(`Compatibilidade: ${maiorCompatibilidade}%`)
+    if (melhorVaga) {
+      console.log("Melhor vaga:")
+      console.log(`Empresa: ${melhorVaga.empresa}`)
+      console.log(`Cargo: ${melhorVaga.cargo}`)
+      console.log(`Compatibilidade: ${maiorCompatibilidade}%`)
+    } else {
+      console.log("Nenhuma vaga encontrada.")
+    }
     console.log("--------------------------------------------------")
 
     console.log("Recomendações de estudo:")
