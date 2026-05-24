@@ -39,10 +39,12 @@ Este projeto foi criado com foco em prática os principais conceitos do **Módul
 
 ## Estrutura do projeto
 
+```text
 skillmatch-js/
 │
 ├── skillmatch.js
 └── README.md
+```
 
 ---
 
